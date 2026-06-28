@@ -26,6 +26,8 @@ def create_app(config_name='development'):
     login_manager.init_app(app)
     bcrypt.init_app(app)
     csrf.init_app(app)
+    login_manager.login_view = 'auth.login'
+    login_manager.login_message = 'Por favor, inicia sesión para acceder a esta página.'
     
     # Registrar blueprints
     from .blueprints.auth import auth_bp
