@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Fashion360 - Moda Cholita{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="text-center mb-5">
+        <h1 class="display-4" style="font-family: 'Playfair Display', serif; color: #1A1A2E;">
+            <i class="bi bi-arrow-360" style="color: #E83A8B;"></i> 
+            Fashion360
+        </h1>
+        <p class="lead" style="color: #8B4513;">
+            <i class="bi bi-flower1" style="color: #E83A8B;"></i> 
+            Moda para la Cholita Boliviana 
+            <i class="bi bi-flower1" style="color: #E83A8B;"></i>
+        </p>
+        <hr style="width: 50%; margin: 0 auto; border-color: #E83A8B;">
+    </div>
+
+    <!-- Productos Destacados -->
+    <h3 class="mb-3">
+        <i class="bi bi-star-fill" style="color: #FFC107;"></i> 
+        Productos Destacados
+    </h3>
+    <div class="row">
+        {% if productos %}
+            {% for p in productos %}
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-lg h-100 border-0">
+                    <!-- 🔥 IMAGEN CORREGIDA -->
+                    {% set imagen_principal = p.imagenes|selectattr('es_principal')|first %}
+                    {% if imagen_principal %}
+                        <img src="{{ imagen_principal.url }}" 
+                             class="card-img-top" 
+                             alt="{{ p.nombre }}"
+                             style="height: 250px; object-fit: cover;"
+                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'400\'%3E%3Crect width=\'400\' height=\'400\' fill=\'%23f8f5f0\'/%3E%3Ctext x=\'200\' y=\'200\' font-family=\'Arial\' font-size=\'20\' fill=\'%23ccc\' text-anchor=\'middle\' dy=\'.3em\'%3ESin imagen%3C/text%3E%3C/svg%3E'">
+                    {% else %}
+                        <div style="height: 250px; background: #f8f5f0; display: flex; align-items: center; justify-content: center; color: #ccc;">
+                            <i class="bi bi-image" style="font-size: 64px;"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="card-body">
+                        <h5 class="card-title">{{ p.nombre }}</h5>
+                        <p class="card-text text-muted small">{{ p.categoria.nombre }} | {{ p.marca.nombre }}</p>
+                        <h5 class="text-success">Bs {{ "%.2f"|format(p.precio) }}</h5>
+                        <a href="{{ url_for('shop.producto_detalle', id=p.id) }}" 
+                           class="btn btn-primary w-100">
+                            <i class="bi bi-eye"></i> Ver Detalle
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-md-12">
+                <div class="alert alert-info text-center">
+                    <i class="bi bi-info-circle"></i> 
+                    No hay productos disponibles en este momento.
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

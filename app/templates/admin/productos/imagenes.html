@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Imágenes - {{ producto.nombre }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-md-3 col-lg-2 p-0">
+            {% include 'admin/sidebar.html' %}
+        </div>
+        
+        <div class="col-md-9 col-lg-10 p-4" style="margin-left: 260px;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2>
+                    <i class="bi bi-images" style="color: #E83A8B;"></i> 
+                    Imágenes: {{ producto.nombre }}
+                </h2>
+                <a href="{{ url_for('admin.productos') }}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Volver a Productos
+                </a>
+            </div>
+            <hr>
+            
+            <!-- Mensajes Flash -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show">
+                            <i class="bi bi-{% if category == 'success' %}check-circle-fill{% elif category == 'danger' %}x-circle-fill{% elif category == 'warning' %}exclamation-triangle-fill{% else %}info-circle-fill{% endif %}"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <!-- Subir imagen -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-header">
+                            <i class="bi bi-upload"></i> Subir Imagen
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" enctype="multipart/form-data">
+                                {{ form.hidden_tag() }}
+                                
+                                <div class="mb-3">
+                                    {{ form.imagen.label(class="form-label") }}
+                                    {{ form.imagen(class="form-control") }}
+                                    {% if form.imagen.errors %}
+                                        <div class="text-danger">
+                                            {% for error in form.imagen.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-3 form-check">
+                                    {{ form.es_principal(class="form-check-input") }}
+                                    {{ form.es_principal.label(class="form-check-label") }}
+                                </div>
+                                
+                                {{ form.submit(class="btn btn-primary") }}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <h4><i class="bi bi-images"></i> Galería</h4>
+                    <hr>
+                    
+                    <div class="row">
+                        {% for img in imagenes %}
+                        <div class="col-md-3 mb-3">
+                            <div class="card shadow-sm">
+                                <img src="{{ img.url }}" class="card-img-top" alt="Imagen" style="height: 150px; object-fit: cover;">
+                                <div class="card-body text-center">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        {% if img.es_principal %}
+                                            <span class="badge bg-success">Principal</span>
+                                        {% else %}
+                                            <a href="{{ url_for('admin.marcar_principal', id=img.id) }}" 
+                                               class="btn btn-outline-warning">
+                                                Marcar principal
+                                            </a>
+                                        {% endif %}
+                                        <a href="{{ url_for('admin.eliminar_imagen', id=img.id) }}" 
+                                           class="btn btn-danger"
+                                           onclick="return confirm('¿Eliminar esta imagen?')">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="col-md-12">
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i> 
+                                No hay imágenes para este producto. Sube una imagen arriba.
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,338 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ producto.nombre }} - Fashion360{% endblock %}
+
+{% block extra_css %}
+<style>
+    .product-image {
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        width: 100%;
+        max-height: 500px;
+        object-fit: contain;
+        background: #fff8f0;
+    }
+    
+    .product-image:hover {
+        transform: scale(1.02);
+        box-shadow: 0 15px 50px rgba(232, 58, 139, 0.2);
+    }
+    
+    .thumbnail {
+        cursor: pointer;
+        border-radius: 12px;
+        border: 3px solid transparent;
+        transition: all 0.3s ease;
+        height: 80px;
+        width: 100%;
+        object-fit: cover;
+    }
+    
+    .thumbnail:hover {
+        border-color: #E83A8B;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 20px rgba(232, 58, 139, 0.3);
+    }
+    
+    .thumbnail.active {
+        border-color: #E83A8B;
+        box-shadow: 0 0 0 3px rgba(232, 58, 139, 0.3);
+    }
+    
+    .price {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #28a745;
+        font-family: 'Playfair Display', serif;
+    }
+    
+    .product-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        color: #1A1A2E;
+        font-size: 2rem;
+    }
+    
+    .category-badge {
+        background: linear-gradient(135deg, #E83A8B, #6F42C1);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        display: inline-block;
+    }
+    
+    .brand-badge {
+        background: linear-gradient(135deg, #FFC107, #FD7E14);
+        color: #1A1A2E;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        display: inline-block;
+    }
+    
+    .stock-badge {
+        padding: 8px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+    }
+    
+    .btn-add-cart {
+        background: linear-gradient(135deg, #E83A8B, #6F42C1);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+    
+    .btn-add-cart:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(232, 58, 139, 0.4);
+        color: white;
+    }
+    
+    .btn-add-cart:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+    
+    .description-box {
+        background: #f8f5f0;
+        padding: 20px;
+        border-radius: 15px;
+        border-left: 5px solid #E83A8B;
+    }
+    
+    .breadcrumb {
+        background: #f8f5f0;
+        padding: 12px 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+    }
+    
+    .breadcrumb-item a {
+        color: #6F42C1;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+    
+    .breadcrumb-item a:hover {
+        color: #E83A8B;
+        text-decoration: underline;
+    }
+    
+    .breadcrumb-item.active {
+        color: #1A1A2E;
+        font-weight: 600;
+    }
+    
+    .breadcrumb-item+.breadcrumb-item::before {
+        content: "›";
+        font-size: 1.2rem;
+        color: #6F42C1;
+    }
+
+    /* ===== ESTILOS VISOR 360° ===== */
+    #visor-360 {
+        width: 100%;
+        max-width: 500px;
+        height: 350px;
+        margin: 0 auto;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        background: #fff8f0;
+        position: relative;
+        cursor: grab;
+    }
+    
+    #visor-360:active {
+        cursor: grabbing;
+    }
+    
+    #imagen-360 {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: none;
+        user-select: none;
+        -webkit-user-drag: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ url_for('shop.index') }}"><i class="bi bi-house"></i> Inicio</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ url_for('shop.index') }}">{{ producto.categoria.nombre }}</a>
+            </li>
+            <li class="breadcrumb-item active">
+                {{ producto.nombre }}
+            </li>
+        </ol>
+    </nav>
+    
+    <div class="row">
+        <!-- Galería de imágenes -->
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="card-body p-3">
+                    <!-- Imagen principal -->
+                    {% set imagen_principal = producto.imagenes|selectattr('es_principal', 'equalto', true)|first %}
+                    {% if imagen_principal %}
+                        <img id="imagen_principal" 
+                             src="{{ imagen_principal.url }}" 
+                             class="product-image" 
+                             alt="{{ producto.nombre }}"
+                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'400\'%3E%3Crect width=\'400\' height=\'400\' fill=\'%23f8f5f0\'/%3E%3Ctext x=\'200\' y=\'200\' font-family=\'Arial\' font-size=\'20\' fill=\'%23ccc\' text-anchor=\'middle\' dy=\'.3em\'%3EImagen no disponible%3C/text%3E%3C/svg%3E'">
+                    {% else %}
+                        <div style="height: 400px; background: linear-gradient(135deg, #f8f5f0, #e8d5e0); display: flex; align-items: center; justify-content: center; border-radius: 15px;">
+                            <div class="text-center">
+                                <i class="bi bi-image" style="font-size: 80px; color: #ccc;"></i>
+                                <p class="text-muted mt-2">Sin imagen disponible</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Miniaturas -->
+                    {% if producto.imagenes|length > 1 %}
+                        <div class="row mt-3">
+                            {% for img in producto.imagenes %}
+                            <div class="col-3">
+                                <img src="{{ img.url }}" 
+                                     class="thumbnail {% if img.es_principal %}active{% endif %}"
+                                     onclick="cambiarImagen('{{ img.url }}', this)"
+                                     alt="Miniatura"
+                                     onerror="this.style.display='none'">
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Información del producto -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="card-body p-4">
+                    <!-- Categoría y Marca -->
+                    <div class="mb-3">
+                        <span class="category-badge">
+                            <i class="bi bi-tag"></i> {{ producto.categoria.nombre }}
+                        </span>
+                        <span class="brand-badge ms-2">
+                            <i class="bi bi-tags"></i> {{ producto.marca.nombre }}
+                        </span>
+                    </div>
+                    
+                    <!-- Título -->
+                    <h1 class="product-title">{{ producto.nombre }}</h1>
+                    
+                    <!-- Precio -->
+                    <div class="my-4">
+                        <span class="price">Bs {{ "%.2f"|format(producto.precio) }}</span>
+                    </div>
+                    
+                    <!-- Stock -->
+                    <div class="mb-3">
+                        {% if producto.stock > 0 %}
+                            <span class="badge bg-success stock-badge">
+                                <i class="bi bi-check-circle"></i> Disponible ({{ producto.stock }} unidades)
+                            </span>
+                        {% else %}
+                            <span class="badge bg-danger stock-badge">
+                                <i class="bi bi-x-circle"></i> Agotado
+                            </span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Descripción -->
+                    <div class="description-box mb-4">
+                        <h6 class="fw-bold text-secondary">
+                            <i class="bi bi-file-text"></i> Descripción
+                        </h6>
+                        <p class="mb-0">{{ producto.descripcion or 'Sin descripción disponible' }}</p>
+                    </div>
+                    
+                    <!-- Botón Agregar al Carrito -->
+                    <form action="{{ url_for('shop.agregar_al_carrito', producto_id=producto.id) }}" method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="row mb-3">
+                            <div class="col-4">
+                                <input type="number" name="cantidad" value="1" min="1" max="{{ producto.stock }}" 
+                                    class="form-control form-control-lg" style="border-radius: 30px;">
+                            </div>
+                            <div class="col-8">
+                                <button type="submit" class="btn-add-cart" {% if producto.stock == 0 %}disabled{% endif %}>
+                                    <i class="bi bi-cart-plus"></i> 
+                                    {% if producto.stock > 0 %}
+                                        Agregar al Carrito
+                                    {% else %}
+                                        Producto Agotado
+                                    {% endif %}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <!-- Volver -->
+                    <div class="text-center mt-3">
+                        <a href="{{ url_for('shop.index') }}" class="btn btn-outline-secondary btn-lg" style="border-radius: 30px; padding: 10px 30px;">
+                            <i class="bi bi-arrow-left"></i> Seguir Comprando
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    {% if imagenes_360|length > 0 %}
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h4>
+                <i class="bi bi-arrow-360" style="color: #E83A8B;"></i> 
+                Vista 360°
+            </h4>
+            <hr>
+            <div id="visor-360">
+                <img id="imagen-360" src="{{ producto.imagenes_360[0].url }}" alt="Vista 360°">
+            </div>
+            <div class="text-center mt-2">
+                <small class="text-muted">Arrastra para girar 360°</small>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+  
+
+</div> <!-- Cierra container -->
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+    // Cambiar imagen principal al hacer clic en miniatura
+    function cambiarImagen(url, elemento) {
+        document.getElementById('imagen_principal').src = url;
+        document.querySelectorAll('.thumbnail').forEach(function(el) {
+            el.classList.remove('active');
+        });
+        elemento.classList.add('active');
+    }
+</script>
+
+{% endblock %}

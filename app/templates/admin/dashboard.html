@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Fashion360{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar fijo -->
+        <div class="col-md-3 col-lg-2 p-0">
+            {% include 'admin/sidebar.html' %}
+        </div>
+        
+        <!-- Contenido con margen para no superponerse -->
+        <div class="col-md-9 col-lg-10 p-4" style="margin-left: 260px; min-height: 80vh;">
+            <h2>
+                <i class="bi bi-speedometer2" style="color: #E83A8B;"></i> 
+                Dashboard 
+                <small class="text-muted" style="font-size: 0.6em;">Fashion360</small>
+            </h2>
+            <hr>
+            
+            <!-- Estadísticas -->
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <div class="card text-white bg-primary shadow-lg">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-people"></i> Usuarios</h5>
+                            <h2 class="card-text">{{ total_usuarios }}</h2>
+                            <small>Registrados</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card text-white bg-success shadow-lg">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-box"></i> Productos</h5>
+                            <h2 class="card-text">{{ total_productos }}</h2>
+                            <small>En catálogo</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card text-white bg-warning shadow-lg">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-grid"></i> Categorías</h5>
+                            <h2 class="card-text">{{ total_categorias }}</h2>
+                            <small>Disponibles</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card text-white bg-danger shadow-lg">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-tags"></i> Marcas</h5>
+                            <h2 class="card-text">{{ total_marcas }}</h2>
+                            <small>Registradas</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ventas y Pedidos -->
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-header">
+                            <i class="bi bi-cash-stack"></i> Ventas Totales
+                        </div>
+                        <div class="card-body">
+                            <h2 class="text-success">Bs {{ "%.2f"|format(total_ventas) }}</h2>
+                            <small>Ingresos generados</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-header">
+                            <i class="bi bi-cart"></i> Pedidos
+                        </div>
+                        <div class="card-body">
+                            <h2 class="text-primary">{{ total_pedidos }}</h2>
+                            <small>Pedidos realizados</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Acciones Rápidas -->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-header">
+                            <i class="bi bi-lightning-fill"></i> Acciones Rápidas
+                        </div>
+                        <div class="card-body">
+                            <a href="{{ url_for('admin.crear_producto') }}" class="btn btn-primary">
+                                <i class="bi bi-plus-circle"></i> Nuevo Producto
+                            </a>
+                            <a href="{{ url_for('admin.crear_categoria') }}" class="btn btn-success">
+                                <i class="bi bi-plus-circle"></i> Nueva Categoría
+                            </a>
+                            <a href="{{ url_for('admin.crear_marca') }}" class="btn btn-warning">
+                                <i class="bi bi-plus-circle"></i> Nueva Marca
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,161 @@
+<div class="sidebar" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    background: linear-gradient(180deg, #2D1B3D 0%, #1A1A2E 50%, #0F3460 100%);
+    border-right: 3px solid #E83A8B;
+    padding: 20px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+">
+    <h4 class="text-center mb-4" style="color: #FFC107; font-family: 'Playfair Display', serif; font-weight: 700;">
+        <i class="bi bi-arrow-360" style="color: #E83A8B;"></i> 
+        Fashion360
+    </h4>
+    <hr style="border-color: #E83A8B;">
+    
+    <div class="nav flex-column flex-grow-1">
+        <a href="{{ url_for('admin.dashboard') }}" class="nav-link text-white" style="
+            padding: 12px 20px;
+            margin: 4px 8px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            color: #E8D5E0 !important;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        ">
+            <i class="bi bi-speedometer2" style="margin-right: 12px; width: 24px; text-align: center;"></i> 
+            Dashboard
+        </a>
+        
+        <a href="{{ url_for('admin.categorias') }}" class="nav-link text-white" style="
+            padding: 12px 20px;
+            margin: 4px 8px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            color: #E8D5E0 !important;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        ">
+            <i class="bi bi-grid" style="margin-right: 12px; width: 24px; text-align: center;"></i> 
+            Categorías
+        </a>
+        
+        <a href="{{ url_for('admin.marcas') }}" class="nav-link text-white" style="
+            padding: 12px 20px;
+            margin: 4px 8px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            color: #E8D5E0 !important;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        ">
+            <i class="bi bi-tags" style="margin-right: 12px; width: 24px; text-align: center;"></i> 
+            Marcas
+        </a>
+        
+        <a href="{{ url_for('admin.productos') }}" class="nav-link text-white" style="
+            padding: 12px 20px;
+            margin: 4px 8px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            color: #E8D5E0 !important;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        ">
+            <i class="bi bi-box" style="margin-right: 12px; width: 24px; text-align: center;"></i> 
+            Productos
+        </a>
+        
+        <a href="{{ url_for('admin.listar_pedidos') }}" class="nav-link text-white" style="
+            padding: 12px 20px;
+            margin: 4px 8px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            color: #E8D5E0 !important;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        ">
+            <i class="bi bi-receipt" style="margin-right: 12px; width: 24px; text-align: center;"></i> 
+            Pedidos
+        </a>
+
+        <hr style="border-color: #E83A8B;">
+        
+        <a href="{{ url_for('shop.index') }}" class="nav-link text-white" style="
+            padding: 12px 20px;
+            margin: 4px 8px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            color: #E8D5E0 !important;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        ">
+            <i class="bi bi-house" style="margin-right: 12px; width: 24px; text-align: center;"></i> 
+            Ver Tienda
+        </a>
+        
+        <a href="{{ url_for('auth.logout') }}" class="nav-link text-white" style="
+            padding: 12px 20px;
+            margin: 4px 8px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            color: #E8D5E0 !important;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        ">
+            <i class="bi bi-box-arrow-right" style="margin-right: 12px; width: 24px; text-align: center;"></i> 
+            Cerrar Sesión
+        </a>
+    </div>
+    
+    <div class="text-center text-muted small" style="margin-top: auto; padding-top: 20px;">
+        <hr style="border-color: #E83A8B;">
+        <p class="mb-0">
+            <i class="bi bi-arrow-360" style="color: #E83A8B;"></i> 
+            Fashion360 v1.0
+        </p>
+        <p style="color: #E8D5E0; font-size: 0.8rem;">
+            <i class="bi bi-person-circle"></i> 
+            {{ current_user.nombre_completo }}
+        </p>
+        <small style="color: #E83A8B;">Cholita Fashion</small>
+    </div>
+</div>
+
+<style>
+    .sidebar .nav-link:hover {
+        background: linear-gradient(135deg, #E83A8B, #6F42C1) !important;
+        color: white !important;
+        transform: translateX(8px);
+        box-shadow: 0 4px 15px rgba(232, 58, 139, 0.4);
+    }
+    
+    .sidebar::-webkit-scrollbar {
+        width: 5px;
+    }
+    
+    .sidebar::-webkit-scrollbar-track {
+        background: #2D1B3D;
+    }
+    
+    .sidebar::-webkit-scrollbar-thumb {
+        background: #E83A8B;
+        border-radius: 10px;
+    }
+    
+    .sidebar::-webkit-scrollbar-thumb:hover {
+        background: #FFC107;
+    }
+</style>

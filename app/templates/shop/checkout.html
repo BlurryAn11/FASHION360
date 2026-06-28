@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Finalizar Compra - Fashion360{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>
+        <i class="bi bi-credit-card" style="color: #E83A8B;"></i> 
+        Finalizar Compra
+    </h2>
+    <hr>
+    
+    <div class="row">
+        <!-- Formulario -->
+        <div class="col-md-7">
+            <div class="card shadow-lg border-0">
+                <div class="card-header">
+                    <i class="bi bi-person"></i> Datos de envío
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            {{ form.direccion.label(class="form-label") }}
+                            {{ form.direccion(class="form-control", placeholder="Calle, número, zona, ciudad") }}
+                            {% if form.direccion.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.direccion.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.telefono.label(class="form-label") }}
+                            {{ form.telefono(class="form-control", placeholder="Ej: 71234567") }}
+                            {% if form.telefono.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.telefono.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.notas.label(class="form-label") }}
+                            {{ form.notas(class="form-control", rows=3, placeholder="Instrucciones adicionales para el envío (opcional)") }}
+                        </div>
+                        
+                        {{ form.submit(class="btn btn-success btn-lg w-100") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Resumen del pedido -->
+        <div class="col-md-5">
+            <div class="card shadow-lg border-0">
+                <div class="card-header">
+                    <i class="bi bi-cart"></i> Resumen del pedido
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cant.</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for id, item in carrito.items() %}
+                                <tr>
+                                    <td>{{ item.nombre }}</td>
+                                    <td>{{ item.cantidad }}</td>
+                                    <td>Bs {{ "%.2f"|format(item.precio * item.cantidad) }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr class="table-dark">
+                                    <td colspan="2"><strong>TOTAL</strong></td>
+                                    <td><strong>Bs {{ "%.2f"|format(total) }}</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('shop.ver_carrito') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Volver al carrito
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
