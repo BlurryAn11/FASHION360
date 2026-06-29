@@ -332,7 +332,7 @@ def marcar_principal(id):
     flash('Imagen marcada como principal', 'success')
     return redirect(url_for('admin.gestionar_imagenes', id=producto_id))
 
-# ==================== GESTIÓN DE PEDIDOS (ADMIN) ====================
+# ==================== GESTIÓN DE PEDIDOS del administrador ====================
 
 @admin_bp.route('/pedidos')
 @login_required
